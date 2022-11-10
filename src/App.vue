@@ -351,6 +351,26 @@
       </div>
     </section>
   </main>
+
+  <div class="login-modal show" v-if="!isAuthorized">
+    <div class="login-modal__content">
+      <div class="login-modal__form">
+        <label class="modal-field">
+          <span class="modal-field__text"></span>
+          <input
+            type="password"
+            name="password"
+            v-model="authPass"
+            v-on:keyup.enter="checkPass"
+            placeholder="Введите пароль"
+          />
+        </label>
+        <button type="button" @click="checkPass" class="btn">
+          Авторизация
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -366,6 +386,9 @@ export default {
   },
   data() {
     return {
+      isAuthorized: false,
+      authPassData: "Voxel987=",
+      authPass: "",
       services: [],
       offerTitle: "",
       offerDescr: "",
@@ -387,8 +410,20 @@ export default {
   },
 
   watch: {},
-
+  created() {
+    if (sessionStorage.getItem("loginTrue")) {
+      this.isAuthorized = true;
+    }
+  },
   methods: {
+    checkPass() {
+      this.isAuthorized =
+        this.authPass.trim() === this.authPassData ? true : false;
+
+      if (this.isAuthorized) {
+        sessionStorage.setItem("loginTrue", true);
+      }
+    },
     setOfferTmp(event) {
       const serviceList = event.services;
       this.services = [];
