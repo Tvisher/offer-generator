@@ -450,7 +450,7 @@ export default {
       if (
         !this.serviceTitle.trim() ||
         !this.serviceDescription.trim() ||
-        !this.servicePrice === ""
+        !this.servicePrice.trim() === ""
       ) {
         return;
       }
