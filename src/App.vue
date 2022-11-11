@@ -251,6 +251,9 @@
               </div>
               <div class="btns-wrapper">
                 <button class="btn" @click="getPrint()">Сформировать КП</button>
+                <button class="btn" @click="getPrintWidthoutPrice()">
+                  Сформировать КП без цен
+                </button>
               </div>
             </div>
           </div>
@@ -288,7 +291,7 @@
         <span class="offer-title">Что будет реализовано:</span>
         <table class="offer-doc__table">
           <thead>
-            <tr :class="period" class="thead-row">
+            <tr :class="[period, printWidthoutPrice]" class="thead-row">
               <th>Услуга</th>
               <th>Описание</th>
               <th>Стоимость</th>
@@ -296,7 +299,7 @@
           </thead>
           <tbody>
             <tr
-              :class="period"
+              :class="[period, printWidthoutPrice]"
               class="tbody-row"
               v-for="service in services"
               :key="service.serviceId"
@@ -406,6 +409,7 @@ export default {
       footnote: "",
       selectedTemplate: null,
       templateOptions: Localdb,
+      printWidthoutPrice: "",
     };
   },
 
@@ -424,6 +428,7 @@ export default {
         sessionStorage.setItem("loginTrue", true);
       }
     },
+
     setOfferTmp(event) {
       const serviceList = event.services;
       this.services = [];
@@ -537,7 +542,13 @@ export default {
       setTimeout(() => {
         window.print();
         this.toPrint = !this.toPrint;
+        if (this.printWidthoutPrice !== "") this.printWidthoutPrice = "";
       }, 200);
+    },
+
+    getPrintWidthoutPrice() {
+      this.printWidthoutPrice = "hide";
+      this.getPrint();
     },
 
     getCurrentDate() {

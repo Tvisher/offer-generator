@@ -3053,6 +3053,10 @@ td {
   width: 11%;
 }
 
+.thead-row.hide th:nth-of-type(1),
+.thead-row.hide td:nth-of-type(1),
+.tbody-row.hide th:nth-of-type(1),
+.tbody-row.hide td:nth-of-type(1),
 .thead-row.year th:nth-of-type(1),
 .thead-row.year td:nth-of-type(1),
 .thead-row.month th:nth-of-type(1),
@@ -3064,6 +3068,10 @@ td {
   width: 40%;
 }
 
+.thead-row.hide th:nth-of-type(2),
+.thead-row.hide td:nth-of-type(2),
+.tbody-row.hide th:nth-of-type(2),
+.tbody-row.hide td:nth-of-type(2),
 .thead-row.year th:nth-of-type(2),
 .thead-row.year td:nth-of-type(2),
 .thead-row.month th:nth-of-type(2),
@@ -3075,6 +3083,14 @@ td {
   width: 60%;
 }
 
+
+
+
+
+.thead-row.hide th:nth-of-type(3),
+.thead-row.hide td:nth-of-type(3),
+.tbody-row.hide th:nth-of-type(3),
+.tbody-row.hide td:nth-of-type(3),
 .thead-row.year th:nth-of-type(3),
 .thead-row.year td:nth-of-type(3),
 .thead-row.month th:nth-of-type(3),
@@ -3239,13 +3255,17 @@ td {
   }
 }
 
+
+
+
+
+
 .select-component {
   width: 100%;
 }
 .select2-selection__placeholder {
   opacity: 1;
 }
-
 
 
 .select2-container--open .select2-dropdown {
