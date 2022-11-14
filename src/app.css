@@ -2683,10 +2683,12 @@ td {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
 }
 
 .offer-doc__res {
   text-align: right;
+  flex-shrink: 0;
 }
 
 .res-block {
@@ -2701,6 +2703,7 @@ td {
 .res-block:last-child {
   font-weight: 600;
   font-size: 18px;
+  white-space: nowrap;
 }
 
 .res-block span {
@@ -2709,6 +2712,7 @@ td {
 }
 
 .boss-name {
+  flex-shrink: 0;
   color: #17171a;
   font-size: 12px;
 }
