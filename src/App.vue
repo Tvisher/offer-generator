@@ -252,7 +252,10 @@
               <div class="btns-wrapper">
                 <button class="btn" @click="getPrint()">Сформировать КП</button>
                 <button class="btn" @click="getPrintWidthoutPrice()">
-                  Сформировать КП без цен
+                  КП без цен
+                </button>
+                <button class="btn" @click="getPrintWidthoutSeal()">
+                  КП без печати
                 </button>
               </div>
             </div>
@@ -325,7 +328,7 @@
         </div>
         <div class="offer-doc__footer">
           <span class="boss-name"> С уважением,<br />Натальчук Д.В. </span>
-          <div class="offer-doc__seal">
+          <div class="offer-doc__seal" v-if="!printWidthoutSeal">
             <img src="../src/assets/img/seal.png" alt="" />
           </div>
           <div class="offer-doc__res">
@@ -410,6 +413,7 @@ export default {
       selectedTemplate: null,
       templateOptions: Localdb,
       printWidthoutPrice: "",
+      printWidthoutSeal: false,
     };
   },
 
@@ -543,11 +547,16 @@ export default {
         window.print();
         this.toPrint = !this.toPrint;
         if (this.printWidthoutPrice !== "") this.printWidthoutPrice = "";
+        if (this.printWidthoutSeal === true) this.printWidthoutSeal = false;
       }, 200);
     },
 
     getPrintWidthoutPrice() {
       this.printWidthoutPrice = "hide";
+      this.getPrint();
+    },
+    getPrintWidthoutSeal() {
+      this.printWidthoutSeal = true;
       this.getPrint();
     },
 
