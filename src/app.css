@@ -2166,7 +2166,7 @@ input[type=number]:focus {
 }
 
 .result-list__wrap {
-  max-height: 540px;
+  /* max-height: 540px; */
   height: 100%;
   margin-bottom: 40px;
   overflow: auto;
