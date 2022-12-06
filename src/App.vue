@@ -148,86 +148,92 @@
             </div>
             <div class="calc__outer-data" v-show="services.length">
               <h2 class="outer-data__title">Предпросмотр КП</h2>
-              <div class="result-list__wrap">
-                <draggable
-                  class="result-list"
-                  :list="services"
-                  item-key="serviceId"
-                  handle=".handle"
-                >
-                  <template #item="{ element }">
-                    <li
-                      class="list-item"
-                      :class="{ editing: element.isEdited }"
-                    >
-                      <div class="handle">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </div>
-                      <div class="list-item__wrapper">
-                        <div class="list-item__head">
-                          <div class="list-item__block list-item__name">
-                            <span class="list-item__nameplate"
-                              >Наименование услуги</span
-                            >
-                            <div
-                              class="list-item__data"
-                              v-show="!element.isEdited"
-                            >
-                              {{ element.serviceTitle }}
-                            </div>
-                            <input
-                              type="text"
-                              v-show="element.isEdited"
-                              v-model="element.serviceTitle"
-                              class="editing-input"
-                            />
-                          </div>
-                          <div class="list-item__block">
-                            <span class="list-item__nameplate">Стоимость</span>
-                            <div
-                              class="list-item__data is-price"
-                              v-show="!element.isEdited"
-                            >
-                              {{ element.servicePrice.toLocaleString("RU-ru") }}
-                              ₸
-                            </div>
-                            <input
-                              type="number"
-                              v-show="element.isEdited"
-                              v-model="element.servicePrice"
-                              class="editing-input"
-                            />
-                          </div>
-                          <div
-                            class="list-item__delete"
-                            @click="deleteservice(element.serviceId)"
-                          ></div>
-                          <div
-                            class="list-item__edit"
-                            @click="
-                              (element.isEdited = !element.isEdited),
-                                saveСhanges(element)
-                            "
-                          ></div>
+              <div class="result-list__shadow">
+                <div class="result-list__wrap">
+                  <draggable
+                    class="result-list"
+                    :list="services"
+                    item-key="serviceId"
+                    handle=".handle"
+                  >
+                    <template #item="{ element }">
+                      <div
+                        class="list-item"
+                        :class="{ editing: element.isEdited }"
+                      >
+                        <div class="handle">
+                          <span></span>
+                          <span></span>
+                          <span></span>
                         </div>
-                        <div class="list-item__footer">
-                          <div
-                            class="list-item__descr"
-                            v-html="element.serviceDescription"
-                            v-show="!element.isEdited"
-                          ></div>
-                          <textarea
-                            class="editing-area"
-                            v-model="element.modifyServiceDescription"
-                            v-show="element.isEdited"
-                          ></textarea>
+                        <div class="list-item__wrapper">
+                          <div class="list-item__head">
+                            <div class="list-item__block list-item__name">
+                              <span class="list-item__nameplate"
+                                >Наименование услуги</span
+                              >
+                              <div
+                                class="list-item__data"
+                                v-show="!element.isEdited"
+                              >
+                                {{ element.serviceTitle }}
+                              </div>
+                              <input
+                                type="text"
+                                v-show="element.isEdited"
+                                v-model="element.serviceTitle"
+                                class="editing-input"
+                              />
+                            </div>
+                            <div class="list-item__block">
+                              <span class="list-item__nameplate"
+                                >Стоимость</span
+                              >
+                              <div
+                                class="list-item__data is-price"
+                                v-show="!element.isEdited"
+                              >
+                                {{
+                                  element.servicePrice.toLocaleString("RU-ru")
+                                }}
+                                ₸
+                              </div>
+                              <input
+                                type="number"
+                                v-show="element.isEdited"
+                                v-model="element.servicePrice"
+                                class="editing-input"
+                              />
+                            </div>
+                            <div
+                              class="list-item__delete"
+                              @click="deleteservice(element.serviceId)"
+                            ></div>
+                            <div
+                              class="list-item__edit"
+                              @click="
+                                (element.isEdited = !element.isEdited),
+                                  saveСhanges(element)
+                              "
+                            ></div>
+                          </div>
+                          <div class="list-item__footer">
+                            <div
+                              class="list-item__descr"
+                              v-html="element.serviceDescription"
+                              v-show="!element.isEdited"
+                            ></div>
+                            <textarea
+                              class="editing-area"
+                              v-model="element.modifyServiceDescription"
+                              v-show="element.isEdited"
+                            ></textarea>
+                          </div>
                         </div>
                       </div>
-                    </li>
-                  </template>
-                </draggable>
+                    </template>
+                  </draggable>
+                </div>
               </div>
               <div class="calc-result">
                 <div class="field-price" v-if="discountPrecent">
