@@ -8,6 +8,16 @@
               <h1 class="calc__title">Формирование КП</h1>
               <Select2
                 class="select-component"
+                v-model="selectedManager"
+                :options="managerOptions"
+                :settings="{
+                  placeholder: 'Ответственный менеджер',
+                  minimumResultsForSearch: -1,
+                }"
+                @select="setManager(selectedManager)"
+              />
+              <Select2
+                class="select-component"
                 v-model="selectedTemplate"
                 :options="templateOptions"
                 :settings="{
@@ -146,125 +156,132 @@
                 </div>
               </div>
             </div>
-            <div class="calc__outer-data" v-show="services.length">
-              <h2 class="outer-data__title">Предпросмотр КП</h2>
-              <div class="result-list__shadow">
-                <div class="result-list__wrap">
-                  <draggable
-                    class="result-list"
-                    :list="services"
-                    item-key="serviceId"
-                    handle=".handle"
-                  >
-                    <template #item="{ element }">
-                      <div
-                        class="list-item"
-                        :class="{ editing: element.isEdited }"
-                      >
-                        <div class="handle">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                        </div>
-                        <div class="list-item__wrapper">
-                          <div class="list-item__head">
-                            <div class="list-item__block list-item__name">
-                              <span class="list-item__nameplate"
-                                >Наименование услуги</span
-                              >
-                              <div
-                                class="list-item__data"
-                                v-show="!element.isEdited"
-                              >
-                                {{ element.serviceTitle }}
-                              </div>
-                              <input
-                                type="text"
-                                v-show="element.isEdited"
-                                v-model="element.serviceTitle"
-                                class="editing-input"
-                              />
-                            </div>
-                            <div class="list-item__block">
-                              <span class="list-item__nameplate"
-                                >Стоимость</span
-                              >
-                              <div
-                                class="list-item__data is-price"
-                                v-show="!element.isEdited"
-                              >
-                                {{
-                                  element.servicePrice.toLocaleString("RU-ru")
-                                }}
-                                ₸
-                              </div>
-                              <input
-                                type="number"
-                                v-show="element.isEdited"
-                                v-model="element.servicePrice"
-                                class="editing-input"
-                              />
-                            </div>
-                            <div
-                              class="list-item__delete"
-                              @click="deleteservice(element.serviceId)"
-                            ></div>
-                            <div
-                              class="list-item__edit"
-                              @click="
-                                (element.isEdited = !element.isEdited),
-                                  saveСhanges(element)
-                              "
-                            ></div>
+            <transition name="fade" mode="out-in">
+              <div class="calc__outer-data" v-show="services.length">
+                <h2 class="outer-data__title">Предпросмотр КП</h2>
+                <div class="result-list__shadow">
+                  <div class="result-list__wrap">
+                    <draggable
+                      class="result-list"
+                      :list="services"
+                      v-bind="dragOptions"
+                      item-key="serviceId"
+                      handle=".handle"
+                    >
+                      <template #item="{ element }">
+                        <div
+                          class="list-item"
+                          :class="{ editing: element.isEdited }"
+                        >
+                          <div class="handle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
                           </div>
-                          <div class="list-item__footer">
-                            <div
-                              class="list-item__descr"
-                              v-html="element.serviceDescription"
-                              v-show="!element.isEdited"
-                            ></div>
-                            <textarea
-                              class="editing-area"
-                              v-model="element.modifyServiceDescription"
-                              v-show="element.isEdited"
-                            ></textarea>
+                          <div class="list-item__wrapper">
+                            <div class="list-item__head">
+                              <div class="list-item__block list-item__name">
+                                <span class="list-item__nameplate"
+                                  >Наименование услуги</span
+                                >
+                                <div
+                                  class="list-item__data"
+                                  v-show="!element.isEdited"
+                                >
+                                  {{ element.serviceTitle }}
+                                </div>
+                                <input
+                                  type="text"
+                                  v-show="element.isEdited"
+                                  v-model="element.serviceTitle"
+                                  class="editing-input"
+                                />
+                              </div>
+                              <div class="list-item__block">
+                                <span class="list-item__nameplate"
+                                  >Стоимость</span
+                                >
+                                <div
+                                  class="list-item__data is-price"
+                                  v-show="!element.isEdited"
+                                >
+                                  {{
+                                    element.servicePrice.toLocaleString("RU-ru")
+                                  }}
+                                  ₸
+                                </div>
+                                <input
+                                  type="number"
+                                  v-show="element.isEdited"
+                                  v-model="element.servicePrice"
+                                  class="editing-input"
+                                />
+                              </div>
+                              <div
+                                class="list-item__delete"
+                                @click="deleteservice(element.serviceId)"
+                              ></div>
+                              <div
+                                class="list-item__edit"
+                                @click="
+                                  (element.isEdited = !element.isEdited),
+                                    saveСhanges(element)
+                                "
+                              ></div>
+                            </div>
+                            <div class="list-item__footer">
+                              <div
+                                class="list-item__descr"
+                                v-html="element.serviceDescription"
+                                v-show="!element.isEdited"
+                              ></div>
+                              <textarea
+                                class="editing-area"
+                                v-model="element.modifyServiceDescription"
+                                v-show="element.isEdited"
+                              ></textarea>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </template>
-                  </draggable>
+                      </template>
+                    </draggable>
+                  </div>
+                </div>
+                <div class="calc-result">
+                  <div class="field-price" v-if="discountPrecent">
+                    Стоимость:<span>{{
+                      offerPrice.toLocaleString("RU-ru")
+                    }}</span
+                    >₸ {{ periodText }}
+                  </div>
+                  <div class="field-sale" v-if="discountPrecent">
+                    Скидка {{ discountPrecent }} % :<span>{{
+                      ((offerPrice / 100) * discountPrecent).toLocaleString(
+                        "RU-ru"
+                      )
+                    }}</span
+                    >₸
+                  </div>
+                  <div class="field-total-price">
+                    Итоговая стоимость:<span>{{
+                      offerPriceWithDiscount.toLocaleString("RU-ru")
+                    }}</span
+                    >₸ {{ periodText }}
+                  </div>
+                </div>
+                <div class="btns-wrapper">
+                  <button class="btn" @click="getPrint()">
+                    Сформировать КП
+                  </button>
+                  <button class="btn" @click="getPrintWidthoutPrice()">
+                    КП без цен
+                  </button>
+                  <button class="btn" @click="getPrintWidthoutSeal()">
+                    КП без печати
+                  </button>
                 </div>
               </div>
-              <div class="calc-result">
-                <div class="field-price" v-if="discountPrecent">
-                  Стоимость:<span>{{ offerPrice.toLocaleString("RU-ru") }}</span
-                  >₸ {{ periodText }}
-                </div>
-                <div class="field-sale" v-if="discountPrecent">
-                  Скидка {{ discountPrecent }} % :<span>{{
-                    ((offerPrice / 100) * discountPrecent).toLocaleString(
-                      "RU-ru"
-                    )
-                  }}</span
-                  >₸
-                </div>
-                <div class="field-total-price">
-                  Итоговая стоимость:<span>{{
-                    offerPriceWithDiscount.toLocaleString("RU-ru")
-                  }}</span
-                  >₸ {{ periodText }}
-                </div>
-              </div>
-              <div class="btns-wrapper">
-                <button class="btn" @click="getPrint()">Сформировать КП</button>
-                <button class="btn" @click="getPrintWidthoutPrice()">
-                  КП без цен
-                </button>
-                <button class="btn" @click="getPrintWidthoutSeal()">
-                  КП без печати
-                </button>
-              </div>
-            </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -276,10 +293,12 @@
             <img src="../src/assets/img/logo.svg" alt="" />
           </div>
           <div class="offer-doc__company-data">
-            <span>Натальчук Денис Валерьевич</span>
-            <span>+7 (777) 541-09-00</span>
-            <a href="mailto:natalchuk@wemake.kz" class="blue-tdu"
-              >natalchuk@wemake.kz</a
+            <span>{{ selectedManagerObject.fullName }}</span>
+            <span>{{ selectedManagerObject.phone }}</span>
+            <a
+              :href="`mailto:${selectedManagerObject.email}`"
+              class="blue-tdu"
+              >{{ selectedManagerObject.email }}</a
             >
           </div>
         </div>
@@ -333,7 +352,9 @@
           * {{ footnote }}
         </div>
         <div class="offer-doc__footer">
-          <span class="boss-name"> С уважением,<br />Натальчук Д.В. </span>
+          <span class="boss-name">
+            С уважением,<br />{{ selectedManagerObject.text }}
+          </span>
           <div class="offer-doc__seal" v-if="!printWidthoutSeal">
             <img src="../src/assets/img/seal.png" alt="" />
           </div>
@@ -417,7 +438,10 @@ export default {
       toPrint: false,
       footnote: "",
       selectedTemplate: null,
-      templateOptions: Localdb,
+      templateOptions: Localdb.templates,
+      managerOptions: Localdb.managers,
+      selectedManager: null,
+      selectedManagerObject: Localdb.managers[0],
       printWidthoutPrice: "",
       printWidthoutSeal: false,
     };
@@ -429,7 +453,26 @@ export default {
       this.isAuthorized = true;
     }
   },
+  computed: {
+    dragOptions() {
+      return {
+        scrollSensitivity: 200,
+        forceFallback: true,
+        animation: 400,
+        group: "pollTypes",
+        disabled: false,
+        ghostClass: "ghost",
+        sort: true,
+      };
+    },
+  },
   methods: {
+    setManager(id) {
+      this.selectedManagerObject = this.managerOptions.find(
+        (item) => item.id == id
+      );
+      console.log(this.selectedManagerObject);
+    },
     checkPass() {
       this.isAuthorized =
         this.authPass.trim() === this.authPassData ? true : false;
@@ -561,6 +604,7 @@ export default {
       this.printWidthoutPrice = "hide";
       this.getPrint();
     },
+
     getPrintWidthoutSeal() {
       this.printWidthoutSeal = true;
       this.getPrint();
@@ -615,3 +659,23 @@ export default {
   },
 };
 </script>
+<style>
+.list-item.sortable-chosen.ghost {
+  opacity: 0;
+}
+
+.list-item.sortable-chosen.sortable-fallback.sortable-drag {
+  background: #17171a;
+  cursor: grab;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
