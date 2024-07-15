@@ -1,5 +1,3 @@
-# cryptonomicon
-
 ## Project setup
 ```
 npm install
